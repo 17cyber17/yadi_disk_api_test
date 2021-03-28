@@ -33,3 +33,4 @@ class API():
 
     def upload_url(self, path_created_resource, url):
         res = requests.post(f'{self.base_url}/resources/upload?path={path_created_resource}&url={url}', headers=self.headers )
+        print(res)
