@@ -9,9 +9,9 @@ class API():
         res = requests.put(f'{self.base_url}/resources?path={path_to_folder}', headers=self.headers)
         print(res)
 
-    def create_copy_file_or_folder(self, path_to_the_copied_resource, path_to_the_created_resource):
-        res = requests.post(f'{self.base_url}/resources/copy?from={path_to_the_copied_resource}&path=\
-                                                                {path_to_the_created_resource}', headers=self.headers)
+    def create_copy_file_or_folder(self, path_copied_resource, path_created_resource):
+        res = requests.post(f'{self.base_url}/resources/copy?from={path_copied_resource}&path=\
+                                                                        {path_created_resource}', headers=self.headers)
         print(res)
 
     def move_file_or_folder(self, path_resource_move, path_created_resource):
