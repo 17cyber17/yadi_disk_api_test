@@ -29,3 +29,14 @@ class BasePage():
 
         return False
 
+    def should_be_resent_link(self):
+        assert self.is_element_present(*BasePageLocators.RECENT_LINK), "Resent link is not present"
+
+    def should_be_disk_link(self):
+        assert self.is_element_present(*BasePageLocators.DISK_LINK), "Disk link is not present"
+
+    def should_be_shared_link(self):
+        assert self.is_element_present(*BasePageLocators.SHARED_LINK), "Shared link is not present"
+
+    def should_be_journal_link(self):
+        assert self.is_element_present(*BasePageLocators.JOURNAL_LINK), "Journal link is not present"
