@@ -42,18 +42,18 @@ class BasePage():
         assert self.is_element_present(*BasePageLocators.JOURNAL_LINK), "Journal link is not present"
 
     def go_to_resent_page(self):
-        link = self.is_element_present(*BasePageLocators.RECENT_LINK)
+        link = self.browser.find_element(*BasePageLocators.RECENT_LINK)
         link.click()
 
     def go_to_disk_page(self):
-        link = self.is_element_present(*BasePageLocators.DISK_LINK)
+        link = self.browser.find_element(*BasePageLocators.DISK_LINK)
         link.click()
 
     def go_to_shared_page(self):
-        link = self.is_element_present(*BasePageLocators.SHARED_LINK)
+        link = self.browser.find_element(*BasePageLocators.SHARED_LINK)
         link.click()
 
     def go_to_journal_page(self):
-        link = self.is_element_present(*BasePageLocators.JOURNAL_LINK)
+        link = self.browser.find_element(*BasePageLocators.JOURNAL_LINK)
         link.click()
 
