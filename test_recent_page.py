@@ -1,5 +1,5 @@
 from .pages.login_page import LoginPage
-from .pages.shared_page import SharedPage
+from .pages.recent_page import RecentPage
 from .yadi_disk_api import API
 import pytest
 
@@ -16,7 +16,7 @@ class TestUserShared():
     @pytest.mark.skip
     def test_upload_file(self, browser):
         link = "https://disk.yandex.ru/client/published"
-        page = SharedPage(browser, link)
+        page = RecentPage(browser, link)
         disk = API()
         path_created_resource = "cat.jpg"
         url = "https://i.imgur.com/Ve9zZPX.jpg"
@@ -27,7 +27,7 @@ class TestUserShared():
 
     def test_delete_file(self, browser):
         link = "https://disk.yandex.ru/client/published"
-        page = SharedPage(browser, link)
+        page = RecentPage(browser, link)
         disk = API()
         path_created_resource = "cat.jpg"
         url = "https://i.imgur.com/Ve9zZPX.jpg"
