@@ -37,5 +37,5 @@ class API():
         print(res)
 
     def empty_trash(self):
-        res = requests.delete(f'{self.base_url}/trash/resources')
+        res = requests.delete(f'{self.base_url}/trash/resources', headers=self.headers)
         print(res)
