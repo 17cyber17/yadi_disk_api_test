@@ -24,6 +24,7 @@ class TestUserShared():
         page.should_be_folder_or_file(path_to_folder)
         disk.delete_file_or_folder(path_to_folder)
 
+    @pytest.mark.skip
     def test_create_unpublish(self, browser):
         link = "https://disk.yandex.ru/client/published"
         page = SharedPage(browser, link)
