@@ -35,3 +35,7 @@ class API():
         res = requests.post(f'{self.base_url}/resources/upload?path={path_created_resource}&url={url}',
                             headers=self.headers )
         print(res)
+
+    def empty_trash(self):
+        res = requests.delete(f'{self.base_url}/trash/resources')
+        print(res)
