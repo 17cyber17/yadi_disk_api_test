@@ -54,7 +54,8 @@ class BasePage():
             if i == "/":
                 print(true_path[beginning_name:end_name - 1])
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name - 1])
-                assert self.is_element_present(*locator_folder_or_file), f'There is no folder named "{true_path[beginning_name:end_name - 1]}"'
+                assert self.is_element_present(
+                    *locator_folder_or_file), f'There is no folder named "{true_path[beginning_name:end_name - 1]}"'
                 folder = self.browser.find_element(*locator_folder_or_file)
                 driver = self.browser
                 actionChains = ActionChains(driver)
@@ -69,7 +70,8 @@ class BasePage():
             if beginning_name != 0:
                 print(true_path[beginning_name:end_name])
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name])
-                assert self.is_element_present(*locator_folder_or_file), f'There is no folder named "{true_path[beginning_name:end_name]}"'
+                assert self.is_element_present(
+                    *locator_folder_or_file), f'There is no folder named "{true_path[beginning_name:end_name]}"'
 
     def go_to_resent_page(self):
         link = self.browser.find_element(*BasePageLocators.RECENT_LINK)

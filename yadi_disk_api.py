@@ -10,13 +10,13 @@ class API():
         print(res)
 
     def create_copy_file_or_folder(self, path_copied_resource, path_created_resource):
-        res = requests.post(f'{self.base_url}/resources/copy?from={path_copied_resource}&path=\
-                                                                        {path_created_resource}', headers=self.headers)
+        res = requests.post(f'{self.base_url}/resources/copy?from={path_copied_resource}&path={path_created_resource}',
+                            headers=self.headers)
         print(res)
 
     def move_file_or_folder(self, path_resource_move, path_created_resource):
-        res = requests.post(f'{self.base_url}/resources/move?from={path_resource_move}&path=\
-                                                                        {path_created_resource}', headers=self.headers)
+        res = requests.post(f'{self.base_url}/resources/move?from={path_resource_move}&path={path_created_resource}',
+                            headers=self.headers)
         print(res)
 
     def delete_file_or_folder(self, path_file_or_folder):
@@ -32,5 +32,6 @@ class API():
         print(res)
 
     def upload_url(self, path_created_resource, url):
-        res = requests.post(f'{self.base_url}/resources/upload?path={path_created_resource}&url={url}', headers=self.headers )
+        res = requests.post(f'{self.base_url}/resources/upload?path={path_created_resource}&url={url}',
+                            headers=self.headers )
         print(res)
