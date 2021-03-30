@@ -31,6 +31,15 @@ class BasePage():
 
         return False
 
+    def is_disappeared(self, how, what, timeout=2):
+        try:
+            WebDriverWait(self.browser, timeout, 1, TimeoutException). \
+                until_not(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            return False
+
+        return True
+
     def should_be_resent_link(self):
         assert self.is_element_present(*BasePageLocators.RECENT_LINK), "Resent link is not present"
 
@@ -55,7 +64,7 @@ class BasePage():
                 print(true_path[beginning_name:end_name - 1])
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name - 1])
                 assert self.is_element_present(
-                    *locator_folder_or_file), f'There is no folder named "{true_path[beginning_name:end_name - 1]}"'
+                    *locator_folder_or_file), f'There is no folder or file named "{true_path[beginning_name:end_name - 1]}"'
                 folder = self.browser.find_element(*locator_folder_or_file)
                 driver = self.browser
                 actionChains = ActionChains(driver)
@@ -65,13 +74,46 @@ class BasePage():
         if beginning_name == 0 and end_name != 0:
             print(true_path)
             locator_folder_or_file = locator.search_for_file_or_folder(true_path)
-            assert self.is_element_present(*locator_folder_or_file), f'There is no folder named "{true_path}"'
+            assert self.is_element_present(*locator_folder_or_file), f'There is no folder or file named "{true_path}"'
         else:
             if beginning_name != 0:
                 print(true_path[beginning_name:end_name])
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name])
                 assert self.is_element_present(
-                    *locator_folder_or_file), f'There is no folder named "{true_path[beginning_name:end_name]}"'
+                    *locator_folder_or_file), f'There is no folder or file named "{true_path[beginning_name:end_name]}"'
+
+    def should_not_be_folder_or_file(self, path):
+        true_path = urllib.parse.unquote(path)
+        end_name = 0
+        beginning_name = 0
+        locator = BasePageLocators()
+
+        for i in true_path:
+            end_name += 1
+            if i == "/":
+                print(true_path[beginning_name:end_name - 1])
+                locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name - 1])
+                assert self.is_disappeared(
+                    *locator_folder_or_file), f'The file or folder named"{true_path[beginning_name:end_name - 1]}"\
+                                                                                            exists, although it shouldnt'
+                folder = self.browser.find_element(*locator_folder_or_file)
+                driver = self.browser
+                actionChains = ActionChains(driver)
+                actionChains.double_click(folder).perform()
+                beginning_name = end_name
+
+        if beginning_name == 0 and end_name != 0:
+            print(true_path)
+            locator_folder_or_file = locator.search_for_file_or_folder(true_path)
+            assert self.is_disappeared(*locator_folder_or_file), f'The file or folder named"{true_path}"\
+                                                                                            exists, although it shouldnt'
+        else:
+            if beginning_name != 0:
+                print(true_path[beginning_name:end_name])
+                locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name])
+                assert self.is_disappeared(
+                    *locator_folder_or_file), f'The file or folder named"{true_path[beginning_name:end_name]}"\
+                                                                                            exists, although it shouldnt'
 
     def go_to_resent_page(self):
         link = self.browser.find_element(*BasePageLocators.RECENT_LINK)
