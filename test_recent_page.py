@@ -13,7 +13,6 @@ class TestUserShared():
         password = "321654987asdfghjz"
         login_page.login_user(login, password)
 
-    @pytest.mark.skip
     def test_upload_file(self, browser):
         link = "https://disk.yandex.ru/client/published"
         page = RecentPage(browser, link)

@@ -13,17 +13,16 @@ class TestUserDisk():
         password = "321654987asdfghjz"
         login_page.login_user(login, password)
 
-    @pytest.mark.skip
     def test_create_folder(self, browser):
         link = "https://disk.yandex.ru/client/disk"
         page = DiskPage(browser, link)
         disk = API()
-        path_to_folder = "QA%2FQA1%2FQA2"
+        path_to_folder = "QA"
         disk.create_folder(path_to_folder)
         page.should_be_folder_or_file(path_to_folder)
         disk.delete_file_or_folder(path_to_folder)
+        disk.empty_trash()
 
-    @pytest.mark.skip
     def test_delete_folder(self, browser):
         link = "https://disk.yandex.ru/client/disk"
         page = DiskPage(browser, link)
@@ -33,8 +32,8 @@ class TestUserDisk():
         page.should_be_folder_or_file(path_to_folder)
         disk.delete_file_or_folder(path_to_folder)
         page.should_not_be_folder_or_file(path_to_folder)
+        disk.empty_trash()
 
-    @pytest.mark.skip
     def test_upload_url(self, browser):
         link = "https://disk.yandex.ru/client/disk"
         page = DiskPage(browser, link)
@@ -44,8 +43,8 @@ class TestUserDisk():
         disk.upload_url(path_created_resource, url)
         page.should_be_folder_or_file(path_created_resource)
         disk.delete_file_or_folder(path_created_resource)
+        disk.empty_trash()
 
-    @pytest.mark.skip
     def test_copy_file(self, browser):
         link = "https://disk.yandex.ru/client/disk"
         page = DiskPage(browser, link)
@@ -64,8 +63,8 @@ class TestUserDisk():
         disk.delete_file_or_folder(path_to_folder)
         disk.delete_file_or_folder(path_created_resource)
         disk.delete_file_or_folder(path_copied_resource)
+        disk.empty_trash()
 
-    @pytest.mark.skip
     def test_move_file(self, browser):
         link = "https://disk.yandex.ru/client/disk"
         page = DiskPage(browser, link)
@@ -82,3 +81,4 @@ class TestUserDisk():
         disk.move_file_or_folder(path_resource_move, path_created_resource)
         page.should_be_folder_or_file(path_created_resource)
         disk.delete_file_or_folder(path_to_folder)
+        disk.empty_trash()

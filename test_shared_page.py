@@ -13,7 +13,6 @@ class TestUserShared():
         password = "321654987asdfghjz"
         login_page.login_user(login, password)
 
-    @pytest.mark.skip
     def test_create_publish(self, browser):
         link = "https://disk.yandex.ru/client/published"
         page = SharedPage(browser, link)
@@ -23,8 +22,8 @@ class TestUserShared():
         disk.publish_resource(path_to_folder)
         page.should_be_folder_or_file(path_to_folder)
         disk.delete_file_or_folder(path_to_folder)
+        disk.empty_trash()
 
-    @pytest.mark.skip
     def test_create_unpublish(self, browser):
         link = "https://disk.yandex.ru/client/published"
         page = SharedPage(browser, link)
@@ -36,3 +35,4 @@ class TestUserShared():
         disk.unpublish_resource(path_to_folder)
         page.should_not_be_folder_or_file(path_to_folder)
         disk.delete_file_or_folder(path_to_folder)
+        disk.empty_trash()

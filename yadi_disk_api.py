@@ -39,3 +39,7 @@ class API():
     def empty_trash(self):
         res = requests.delete(f'{self.base_url}/trash/resources', headers=self.headers)
         print(res)
+
+    def restore_resource_from_trash(self, path_file_or_folder):
+        res = requests.put(f'{self.base_url}/trash/resources/restore?path={path_file_or_folder}', headers=self.headers)
+        print(res)
