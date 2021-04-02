@@ -22,12 +22,12 @@ def browser(request):
     time.sleep(3)
     browser.quit()
 
-@pytest.fixture(scope="function")
-def new_folder():
+@pytest.fixture(scope="function", params=["QA", "QA%2FQA1"])
+def new_folder(request):
     disk = API()
     end_name = 0
     beginning_name = 0
-    path_to_folder = "QA%2FQA2"
+    path_to_folder = request.param
     true_path = urllib.parse.unquote(path_to_folder)
 
     for i in true_path:
@@ -45,20 +45,25 @@ def new_folder():
 
     yield path_to_folder
     end_name = 0
+    beginning_name = 0
 
     for i in true_path:
         end_name += 1
         if i == "/":
             disk.delete_file_or_folder(path_to_folder[0:end_name-1])
+            beginning_name = end_name
             break
+
+    if beginning_name == 0 and end_name != 0:
+        disk.delete_file_or_folder(path_to_folder)
 
     disk.empty_trash()
 
-@pytest.fixture(scope="function")
-def new_file():
+@pytest.fixture(scope="function", params=["catcat"])
+def new_file(request):
     disk = API()
     url = "https://i.imgur.com/Ve9zZPX.jpg"
-    path_created_resource = "catcat"
+    path_created_resource = request.param
     disk.upload_url(path_created_resource, url)
 
     yield path_created_resource
