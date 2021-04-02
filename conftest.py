@@ -47,7 +47,12 @@ def new_folder():
             disk.create_folder(path_to_folder[0:end_name])
 
     yield path_to_folder
-    disk.delete_file_or_folder(true_path)
+    end_name = 0
+
+    for i in true_path:
+        if i == "/":
+            disk.delete_file_or_folder(path_to_folder[0:end_name-1])
+
     disk.empty_trash()
 
 @pytest.fixture(scope="function")
