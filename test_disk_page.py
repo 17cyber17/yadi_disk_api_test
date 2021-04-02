@@ -24,7 +24,7 @@ class TestUserDisk():
         page = DiskPage(browser, link)
         disk = API()
         page.should_be_folder_or_file(new_folder)
-        disk.delete_file_or_folder(new_folder)
+        page.delete_folder(new_folder)
         page.should_not_be_folder_or_file(new_folder)
 
     def test_upload_url(self, new_file, browser):

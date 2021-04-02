@@ -23,5 +23,5 @@ class TestUserShared():
         page = RecentPage(browser, link)
         disk = API()
         page.should_be_folder_or_file(new_file)
-        disk.delete_file_or_folder(new_file)
+        page.delete_folder(new_file)
         page.should_not_be_folder_or_file(new_file)

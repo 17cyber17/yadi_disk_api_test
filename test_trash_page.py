@@ -25,7 +25,7 @@ class TestUserShared():
         link = "https://disk.yandex.ru/client/trash"
         page = TrashPage(browser, link)
         disk = API()
-        disk.delete_file_or_folder(new_folder)
+        page.delete_folder(new_folder)
         page.should_be_folder_or_file(new_folder)
         disk.delete_file_or_folder(new_file)
         page.should_be_folder_or_file(new_file)
@@ -39,7 +39,7 @@ class TestUserShared():
         link = "https://disk.yandex.ru/client/trash"
         page = TrashPage(browser, link)
         disk = API()
-        disk.delete_file_or_folder(new_folder)
+        page.delete_folder(new_folder)
         page.should_be_folder_or_file(new_folder)
         disk.restore_resource_from_trash(new_folder)
         time.sleep(1)
