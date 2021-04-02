@@ -40,18 +40,6 @@ class BasePage():
 
         return True
 
-    def should_be_resent_link(self):
-        assert self.is_element_present(*BasePageLocators.RECENT_LINK), "Resent link is not present"
-
-    def should_be_disk_link(self):
-        assert self.is_element_present(*BasePageLocators.DISK_LINK), "Disk link is not present"
-
-    def should_be_shared_link(self):
-        assert self.is_element_present(*BasePageLocators.SHARED_LINK), "Shared link is not present"
-
-    def should_be_journal_link(self):
-        assert self.is_element_present(*BasePageLocators.JOURNAL_LINK), "Journal link is not present"
-
     def should_be_folder_or_file(self, path):
         true_path = urllib.parse.unquote(path)
         end_name = 0
@@ -123,20 +111,4 @@ class BasePage():
 
         if beginning_name == 0 and end_name != 0:
             disk.delete_file_or_folder(path_to_folder)
-
-    def go_to_resent_page(self):
-        link = self.browser.find_element(*BasePageLocators.RECENT_LINK)
-        link.click()
-
-    def go_to_disk_page(self):
-        link = self.browser.find_element(*BasePageLocators.DISK_LINK)
-        link.click()
-
-    def go_to_shared_page(self):
-        link = self.browser.find_element(*BasePageLocators.SHARED_LINK)
-        link.click()
-
-    def go_to_journal_page(self):
-        link = self.browser.find_element(*BasePageLocators.JOURNAL_LINK)
-        link.click()
 
