@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from .locators import BasePageLocators
 import urllib.parse
+from yadi_disk_api import API
 
 class BasePage():
     def __init__(self, browser, url, timeout=10):
@@ -107,6 +108,21 @@ class BasePage():
                 assert self.is_disappeared(
                     *locator_folder_or_file), f'The file or folder named"{true_path[beginning_name:end_name]}"\
                                                                                             exists, although it shouldnt'
+
+    def delete_folder(self, path_to_folder):
+        end_name = 0
+        beginning_name = 0
+        true_path = urllib.parse.unquote(path_to_folder)
+        disk = API()
+        for i in true_path:
+            end_name += 1
+            if i == "/":
+                disk.delete_file_or_folder(path_to_folder[0:end_name - 1])
+                beginning_name = end_name
+                break
+
+        if beginning_name == 0 and end_name != 0:
+            disk.delete_file_or_folder(path_to_folder)
 
     def go_to_resent_page(self):
         link = self.browser.find_element(*BasePageLocators.RECENT_LINK)
