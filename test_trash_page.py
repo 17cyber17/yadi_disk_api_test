@@ -14,39 +14,33 @@ class TestUserShared():
         password = "321654987asdfghjz"
         login_page.login_user(login, password)
 
-    def test_delete_folder(self, browser):
+    def test_delete_folder(self, new_folder, browser):
         link = "https://disk.yandex.ru/client/trash"
         page = TrashPage(browser, link)
         disk = API()
-        path_to_folder = "QA"
-        disk.create_folder(path_to_folder)
-        disk.delete_file_or_folder(path_to_folder)
-        page.should_be_folder_or_file(path_to_folder)
-        disk.empty_trash()
+        disk.delete_file_or_folder(new_folder)
+        page.should_be_folder_or_file(new_folder)
 
-    def test_empty_trash(self, browser):
+    def test_empty_trash(self, new_folder, new_file, browser):
         link = "https://disk.yandex.ru/client/trash"
         page = TrashPage(browser, link)
         disk = API()
-        path_to_folder = "QA"
-        disk.create_folder(path_to_folder)
-        disk.delete_file_or_folder(path_to_folder)
-        page.should_be_folder_or_file(path_to_folder)
+        disk.delete_file_or_folder(new_folder)
+        page.should_be_folder_or_file(new_folder)
+        disk.delete_file_or_folder(new_file)
+        page.should_be_folder_or_file(new_file)
         disk.empty_trash()
         time.sleep(1)
-        page.should_not_be_folder_or_file(path_to_folder)
+        page.should_not_be_folder_or_file(new_folder)
+        page.should_not_be_folder_or_file(new_file)
 
-    @pytest.mark.skip
-    def test_restore_resource_from_trash(self, browser):
+    @pytest.mark.xfail  #Нерабочий запрос в api
+    def test_restore_resource_from_trash(self, new_folder, browser):
         link = "https://disk.yandex.ru/client/trash"
         page = TrashPage(browser, link)
         disk = API()
-        path_to_folder = "QA"
-        disk.create_folder(path_to_folder)
-        disk.delete_file_or_folder(path_to_folder)
-        page.should_be_folder_or_file(path_to_folder)
-        disk.restore_resource_from_trash(path_to_folder)
+        disk.delete_file_or_folder(new_folder)
+        page.should_be_folder_or_file(new_folder)
+        disk.restore_resource_from_trash(new_folder)
         time.sleep(1)
-        page.should_not_be_folder_or_file(path_to_folder)
-        disk.delete_file_or_folder(path_to_folder)
-        disk.empty_trash()
+        page.should_not_be_folder_or_file(new_folder)

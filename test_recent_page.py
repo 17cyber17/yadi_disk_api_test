@@ -13,25 +13,15 @@ class TestUserShared():
         password = "321654987asdfghjz"
         login_page.login_user(login, password)
 
-    def test_upload_file(self, browser):
+    def test_upload_file(self, new_file, browser):
         link = "https://disk.yandex.ru/client/published"
         page = RecentPage(browser, link)
-        disk = API()
-        path_created_resource = "cat.jpg"
-        url = "https://i.imgur.com/Ve9zZPX.jpg"
-        disk.upload_url(path_created_resource, url)
-        page.should_be_folder_or_file(path_created_resource)
-        disk.delete_file_or_folder(path_created_resource)
-        disk.empty_trash()
+        page.should_be_folder_or_file(new_file)
 
-    def test_delete_file(self, browser):
+    def test_delete_file(self, new_file, browser):
         link = "https://disk.yandex.ru/client/published"
         page = RecentPage(browser, link)
         disk = API()
-        path_created_resource = "cat.jpg"
-        url = "https://i.imgur.com/Ve9zZPX.jpg"
-        disk.upload_url(path_created_resource, url)
-        page.should_be_folder_or_file(path_created_resource)
-        disk.delete_file_or_folder(path_created_resource)
-        page.should_not_be_folder_or_file(path_created_resource)
-        disk.empty_trash()
+        page.should_be_folder_or_file(new_file)
+        disk.delete_file_or_folder(new_file)
+        page.should_not_be_folder_or_file(new_file)

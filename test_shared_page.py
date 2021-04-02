@@ -13,26 +13,18 @@ class TestUserShared():
         password = "321654987asdfghjz"
         login_page.login_user(login, password)
 
-    def test_create_publish(self, browser):
+    def test_create_publish(self, new_folder, browser):
         link = "https://disk.yandex.ru/client/published"
         page = SharedPage(browser, link)
         disk = API()
-        path_to_folder = "QA"
-        disk.create_folder(path_to_folder)
-        disk.publish_resource(path_to_folder)
-        page.should_be_folder_or_file(path_to_folder)
-        disk.delete_file_or_folder(path_to_folder)
-        disk.empty_trash()
+        disk.publish_resource(new_folder)
+        page.should_be_folder_or_file(new_folder)
 
-    def test_create_unpublish(self, browser):
+    def test_create_unpublish(self, new_folder, browser):
         link = "https://disk.yandex.ru/client/published"
         page = SharedPage(browser, link)
         disk = API()
-        path_to_folder = "QA"
-        disk.create_folder(path_to_folder)
-        disk.publish_resource(path_to_folder)
-        page.should_be_folder_or_file(path_to_folder)
-        disk.unpublish_resource(path_to_folder)
-        page.should_not_be_folder_or_file(path_to_folder)
-        disk.delete_file_or_folder(path_to_folder)
-        disk.empty_trash()
+        disk.publish_resource(new_folder)
+        page.should_be_folder_or_file(new_folder)
+        disk.unpublish_resource(new_folder)
+        page.should_not_be_folder_or_file(new_folder)
