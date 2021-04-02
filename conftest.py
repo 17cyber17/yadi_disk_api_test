@@ -27,7 +27,7 @@ def new_folder():
     disk = API()
     end_name = 0
     beginning_name = 0
-    path_to_folder = "QA%2FQA2%2FQA3"
+    path_to_folder = "QA%2FQA2"
     true_path = urllib.parse.unquote(path_to_folder)
 
     for i in true_path:
