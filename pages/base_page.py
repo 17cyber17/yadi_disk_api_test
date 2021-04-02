@@ -25,20 +25,11 @@ class BasePage():
 
     def is_not_element_present(self, how, what, timeout=4):
         try:
-            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
-        except TimeoutException:
+            self.browser.find_element(how, what)
+        except (NoSuchElementException):
             return True
 
         return False
-
-    def is_disappeared(self, how, what, timeout=2):
-        try:
-            WebDriverWait(self.browser, timeout, 1, TimeoutException). \
-                until_not(EC.presence_of_element_located((how, what)))
-        except TimeoutException:
-            return False
-
-        return True
 
     def should_be_folder_or_file(self, path):
         true_path = urllib.parse.unquote(path)
@@ -77,7 +68,7 @@ class BasePage():
             end_name += 1
             if i == "/":
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name - 1])
-                assert self.is_disappeared(
+                assert self.is_not_element_present(
                     *locator_folder_or_file), f'The file or folder named"{true_path[beginning_name:end_name - 1]}"\
                                                                                             exists, although it shouldnt'
                 folder = self.browser.find_element(*locator_folder_or_file)
@@ -88,12 +79,12 @@ class BasePage():
 
         if beginning_name == 0 and end_name != 0:
             locator_folder_or_file = locator.search_for_file_or_folder(true_path)
-            assert self.is_disappeared(*locator_folder_or_file), f'The file or folder named"{true_path}"\
+            assert self.is_not_element_present(*locator_folder_or_file), f'The file or folder named"{true_path}"\
                                                                                             exists, although it shouldnt'
         else:
             if beginning_name != 0:
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name])
-                assert self.is_disappeared(
+                assert self.is_not_element_present(
                     *locator_folder_or_file), f'The file or folder named"{true_path[beginning_name:end_name]}"\
                                                                                             exists, although it shouldnt'
 
