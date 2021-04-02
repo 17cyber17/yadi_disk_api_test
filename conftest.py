@@ -33,25 +33,24 @@ def new_folder():
     for i in true_path:
         end_name += 1
         if i == "/":
-            print(path_to_folder[0:end_name - 1])
             disk.create_folder(path_to_folder[0:end_name-1])
             end_name += 2
             beginning_name = end_name
 
     if beginning_name == 0 and end_name != 0:
-        print(path_to_folder)
         disk.create_folder(path_to_folder)
     else:
         if beginning_name != 0:
-            print(path_to_folder[0:end_name])
             disk.create_folder(path_to_folder[0:end_name])
 
     yield path_to_folder
     end_name = 0
 
     for i in true_path:
+        end_name += 1
         if i == "/":
             disk.delete_file_or_folder(path_to_folder[0:end_name-1])
+            break
 
     disk.empty_trash()
 
