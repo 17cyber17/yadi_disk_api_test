@@ -3,6 +3,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from .yadi_disk_api import API
+import urllib.parse
 
 def pytest_addoption(parser):
     parser.addoption('--language', action='store', default='ru',
@@ -24,11 +25,29 @@ def browser(request):
 @pytest.fixture(scope="function")
 def new_folder():
     disk = API()
-    path_to_folder = "QA"
-    disk.create_folder(path_to_folder)
+    end_name = 0
+    beginning_name = 0
+    path_to_folder = "QA%2FQA2%2FQA3"
+    true_path = urllib.parse.unquote(path_to_folder)
+
+    for i in true_path:
+        end_name += 1
+        if i == "/":
+            print(path_to_folder[0:end_name - 1])
+            disk.create_folder(path_to_folder[0:end_name-1])
+            end_name += 2
+            beginning_name = end_name
+
+    if beginning_name == 0 and end_name != 0:
+        print(path_to_folder)
+        disk.create_folder(path_to_folder)
+    else:
+        if beginning_name != 0:
+            print(path_to_folder[0:end_name])
+            disk.create_folder(path_to_folder[0:end_name])
 
     yield path_to_folder
-    disk.delete_file_or_folder(path_to_folder)
+    disk.delete_file_or_folder(true_path)
     disk.empty_trash()
 
 @pytest.fixture(scope="function")
