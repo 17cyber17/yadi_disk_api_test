@@ -61,7 +61,6 @@ class BasePage():
         for i in true_path:
             end_name += 1
             if i == "/":
-                print(true_path[beginning_name:end_name - 1])
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name - 1])
                 assert self.is_element_present(
                     *locator_folder_or_file), f'There is no folder or file named "{true_path[beginning_name:end_name - 1]}"'
@@ -72,12 +71,10 @@ class BasePage():
                 beginning_name = end_name
 
         if beginning_name == 0 and end_name != 0:
-            print(true_path)
             locator_folder_or_file = locator.search_for_file_or_folder(true_path)
             assert self.is_element_present(*locator_folder_or_file), f'There is no folder or file named "{true_path}"'
         else:
             if beginning_name != 0:
-                print(true_path[beginning_name:end_name])
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name])
                 assert self.is_element_present(
                     *locator_folder_or_file), f'There is no folder or file named "{true_path[beginning_name:end_name]}"'
@@ -91,7 +88,6 @@ class BasePage():
         for i in true_path:
             end_name += 1
             if i == "/":
-                print(true_path[beginning_name:end_name - 1])
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name - 1])
                 assert self.is_disappeared(
                     *locator_folder_or_file), f'The file or folder named"{true_path[beginning_name:end_name - 1]}"\
@@ -103,13 +99,11 @@ class BasePage():
                 beginning_name = end_name
 
         if beginning_name == 0 and end_name != 0:
-            print(true_path)
             locator_folder_or_file = locator.search_for_file_or_folder(true_path)
             assert self.is_disappeared(*locator_folder_or_file), f'The file or folder named"{true_path}"\
                                                                                             exists, although it shouldnt'
         else:
             if beginning_name != 0:
-                print(true_path[beginning_name:end_name])
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name])
                 assert self.is_disappeared(
                     *locator_folder_or_file), f'The file or folder named"{true_path[beginning_name:end_name]}"\
