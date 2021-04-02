@@ -3,6 +3,7 @@ from .pages.disk_page import DiskPage
 from .yadi_disk_api import API
 import pytest
 
+
 class TestUserDisk():
     @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
@@ -39,7 +40,6 @@ class TestUserDisk():
         page.should_be_folder_or_file(new_folder)
         path_copied_resource = new_file
         path_created_resource = new_folder + "%2F" + new_file
-        print(path_created_resource)
         disk.create_copy_file_or_folder(path_copied_resource, path_created_resource)
         page.should_be_folder_or_file(path_created_resource)
 

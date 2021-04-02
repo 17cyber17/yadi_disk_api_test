@@ -14,12 +14,12 @@ class TestUserShared():
         login_page.login_user(login, password)
 
     def test_upload_file(self, new_file, browser):
-        link = "https://disk.yandex.ru/client/published"
+        link = "https://disk.yandex.ru/client/recent"
         page = RecentPage(browser, link)
         page.should_be_folder_or_file(new_file)
 
     def test_delete_file(self, new_file, browser):
-        link = "https://disk.yandex.ru/client/published"
+        link = "https://disk.yandex.ru/client/recent"
         page = RecentPage(browser, link)
         disk = API()
         page.should_be_folder_or_file(new_file)
