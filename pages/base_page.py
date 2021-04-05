@@ -23,15 +23,7 @@ class BasePage():
             return False
         return True
 
-    def is_not_element_present(self, how, what, timeout=4):
-        try:
-            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
-        except TimeoutException:
-            return True
-
-        return False
-
-    def is_disappeared(self, how, what, timeout=1):
+    def is_disappeared(self, how, what, timeout=2):
         try:
             WebDriverWait(self.browser, timeout, 1, TimeoutException).\
                 until_not(EC.presence_of_element_located((how, what)))
@@ -86,7 +78,6 @@ class BasePage():
 
         if beginning_name == 0 and end_name != 0:
             locator_folder_or_file = locator.search_for_file_or_folder(true_path)
-            print(self.is_disappeared(*locator_folder_or_file))
             assert self.is_disappeared(*locator_folder_or_file), f'The file or folder named "{true_path}"\
                                                                                             exists, although it shouldnt'
         else:
@@ -106,21 +97,18 @@ class BasePage():
         for i in true_path[::-1]:
             beginning_name += 1
             if i == "/":
-                print(true_path[:end_name])
-                locator_folder_or_file = locator.search_for_file_or_folder(true_path[end_name - beginning_name+1:end_name])
+                locator_folder_or_file = locator.search_for_file_or_folder(true_path[end_name-beginning_name+1:end_name])
                 disk.delete_file_or_folder(true_path[:end_name])
                 self.is_disappeared(*locator_folder_or_file)
                 end_name = end_name - beginning_name
                 beginning_name = 0
 
         if end_name == len(true_path) and beginning_name != 0:
-            print(true_path)
             locator_folder_or_file = locator.search_for_file_or_folder(true_path)
             disk.delete_file_or_folder(true_path)
             self.is_disappeared(*locator_folder_or_file)
         else:
             if end_name != len(true_path):
-                print(true_path[:end_name])
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[:end_name])
                 disk.delete_file_or_folder(true_path[:end_name])
                 self.is_disappeared(*locator_folder_or_file)
