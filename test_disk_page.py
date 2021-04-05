@@ -3,7 +3,6 @@ from .pages.disk_page import DiskPage
 from .yadi_disk_api import API
 import pytest
 
-
 class TestUserDisk():
     @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
@@ -22,10 +21,10 @@ class TestUserDisk():
     def test_delete_folder(self, new_folder, browser):
         link = "https://disk.yandex.ru/client/disk"
         page = DiskPage(browser, link)
-        disk = API()
         page.should_be_folder_or_file(new_folder)
         page.delete_folder(new_folder)
-        page.should_not_be_folder_or_file(new_folder)
+        # В методе удаления так же реализована проверка того что он действительно удаляет
+        # Иначе не выходит одновременно удалять вложенные папки и проверять их удаление
 
     def test_upload_url(self, new_file, browser):
         link = "https://disk.yandex.ru/client/disk"
