@@ -7,7 +7,7 @@ class LoginPage(BasePage):
         assert self.is_element_present(*LoginPageLocators.LOGIN_FORM), "No login form"
 
     def should_be_login(self):
-        assert self.is_element_present(*LoginPageLocators.LOGIN_INPUT), "No"
+        assert self.is_element_present(*LoginPageLocators.LOGIN_INPUT), "No login input form"
 
     def login_user(self, login, password):
         login_input = self.browser.find_element(*LoginPageLocators.LOGIN_INPUT)
