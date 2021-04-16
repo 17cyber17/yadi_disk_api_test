@@ -40,8 +40,10 @@ class API():
         res = requests.delete(f'{self.base_url}/trash/resources', headers=self.headers)
         print(res)
 
-    #Этот запрос я не смог  заставить работать даже на полигоне яндекса.
-    #Написал в поддержку по этому  поводу.
     def restore_resource_from_trash(self, path_file_or_folder):
         res = requests.put(f'{self.base_url}/trash/resources/restore?path={path_file_or_folder}', headers=self.headers)
         print(res)
+
+    def resources_trash(self):
+        res = requests.get(f'{self.base_url}/trash/resources?path=%2F&fields=_embedded.items.path', headers=self.headers)
+        return res.text
