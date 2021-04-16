@@ -3,7 +3,7 @@ from .pages.recent_page import RecentPage
 from .yadi_disk_api import API
 import pytest
 
-class TestUserShared():
+class TestUserRecent():
     @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
         link = "https://disk.yandex.ru/client/recent"

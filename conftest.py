@@ -22,7 +22,7 @@ def browser(request):
     time.sleep(3)
     browser.quit()
 
-@pytest.fixture(scope="function", params=["QA%2FQA2", "QA"])
+@pytest.fixture(scope="function", params=["QA"])
 def new_folder(request):
     disk = API()
     end_name = 0
