@@ -1,5 +1,31 @@
 from .base_page import BasePage
+from yadi_disk_api import API
+import urllib.parse
+from .locators import BasePageLocators
 
 class DiskPage(BasePage):
-    def __init__(self, *args, **kwargs):
-        super(DiskPage, self).__init__(*args, **kwargs)
+    def delete_folder(self, path_to_folder):
+        true_path = urllib.parse.unquote(path_to_folder)
+        disk = API()
+        locator = BasePageLocators()
+        end_name = len(true_path)
+        beginning_name = 0
+
+        for i in true_path[::-1]:
+            beginning_name += 1
+            if i == "/":
+                locator_folder_or_file = locator.search_for_file_or_folder(true_path[end_name-beginning_name+1:end_name])
+                disk.delete_file_or_folder(true_path[:end_name])
+                self.is_disappeared(*locator_folder_or_file)
+                end_name = end_name - beginning_name
+                beginning_name = 0
+
+        if end_name == len(true_path) and beginning_name != 0:
+            locator_folder_or_file = locator.search_for_file_or_folder(true_path)
+            disk.delete_file_or_folder(true_path)
+            self.is_disappeared(*locator_folder_or_file)
+        else:
+            if end_name != len(true_path):
+                locator_folder_or_file = locator.search_for_file_or_folder(true_path[:end_name])
+                disk.delete_file_or_folder(true_path[:end_name])
+                self.is_disappeared(*locator_folder_or_file)
