@@ -1,26 +1,33 @@
 import pytest
 import time
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from .yadi_disk_api import API
 import urllib.parse
 
+
 def pytest_addoption(parser):
-    parser.addoption('--language', action='store', default='ru',
-                     help="Choose language")
+    parser.addoption('--browser_name', action='store', default="chrome",
+                     help="Choose browser: chrome or firefox")
+
 
 @pytest.fixture(scope="function")
 def browser(request):
-    user_language = request.config.getoption("language")
-    print("\nstart browser for test..")
-    options = Options()
-    options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
-    browser = webdriver.Chrome(options=options)
+    browser_name = request.config.getoption("browser_name")
+    browser = None
+    if browser_name == "chrome":
+        print("\nstart chrome browser for test..")
+        browser = webdriver.Chrome()
+    elif browser_name == "firefox":
+        print("\nstart firefox browser for test..")
+        browser = webdriver.Firefox()
+    else:
+        raise pytest.UsageError("--browser_name should be chrome or firefox")
 
     yield browser
     print("\nquit browser..")
     time.sleep(3)
     browser.quit()
+
 
 @pytest.fixture(scope="function", params=["QA%2FQA2"])
 def new_folder(request):
@@ -58,6 +65,7 @@ def new_folder(request):
         disk.delete_file_or_folder(path_to_folder)
 
     disk.empty_trash()
+
 
 @pytest.fixture(scope="function", params=["catcat"])
 def new_file(request):
