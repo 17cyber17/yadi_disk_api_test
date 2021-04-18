@@ -33,6 +33,20 @@ class BasePage():
         return True
 
     def should_be_folder_or_file(self, path):
+        def check(beginning_name, end_name, true_path, locator_folder_or_file):
+            assert self.is_element_present(*locator_folder_or_file), \
+                f'There is no folder or file named "{true_path[beginning_name:end_name]}"'
+
+        self.walk_the_path(path, check)
+
+    def should_not_be_folder_or_file(self, path):
+        def check(beginning_name, end_name, true_path, locator_folder_or_file):
+            assert self.is_disappeared(*locator_folder_or_file), \
+                f'The file or folder named "{true_path[beginning_name:end_name]}"exists, although it shouldnt'
+
+        self.walk_the_path(path, check)
+
+    def walk_the_path(self, path, check_function):
         true_path = urllib.parse.unquote(path)
         end_name = 0
         beginning_name = 0
@@ -52,40 +66,11 @@ class BasePage():
 
         if beginning_name == 0 and end_name != 0:
             locator_folder_or_file = locator.search_for_file_or_folder(true_path)
-            assert self.is_element_present(*locator_folder_or_file), f'There is no folder or file named "{true_path}"'
+            check_function(beginning_name, end_name, true_path, locator_folder_or_file)
         else:
             if beginning_name != 0:
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name])
-                assert self.is_element_present(
-                    *locator_folder_or_file), f'There is no folder or file named "{true_path[beginning_name:end_name]}"'
-
-    def should_not_be_folder_or_file(self, path):
-        true_path = urllib.parse.unquote(path)
-        end_name = 0
-        beginning_name = 0
-        locator = BasePageLocators()
-
-        for i in true_path:
-            end_name += 1
-            if i == "/":
-                locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name - 1])
-                assert self.is_element_present(*locator_folder_or_file), f'There is no folder or file named "{true_path}"'
-                folder = self.browser.find_element(*locator_folder_or_file)
-                driver = self.browser
-                actionChains = ActionChains(driver)
-                actionChains.double_click(folder).perform()
-                beginning_name = end_name
-
-        if beginning_name == 0 and end_name != 0:
-            locator_folder_or_file = locator.search_for_file_or_folder(true_path)
-            assert self.is_disappeared(*locator_folder_or_file), f'The file or folder named "{true_path}"\
-                                                                                            exists, although it shouldnt'
-        else:
-            if beginning_name != 0:
-                locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name])
-                assert self.is_disappeared(
-                    *locator_folder_or_file), f'The file or folder named "{true_path[beginning_name:end_name]}"\ ' \
-                                              f'exists, although it shouldnt'
+                check_function(beginning_name, end_name, true_path, locator_folder_or_file)
 
     def delete_folder(self, path_to_folder):
         true_path = urllib.parse.unquote(path_to_folder)
