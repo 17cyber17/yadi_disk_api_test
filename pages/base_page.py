@@ -6,7 +6,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from .locators import BasePageLocators
 import urllib.parse
 
-class BasePage():
+
+class BasePage:
     def __init__(self, browser, url, timeout=10):
         self.browser = browser
         self.url = url
@@ -18,7 +19,7 @@ class BasePage():
     def is_element_present(self, how, what):
         try:
             self.browser.find_element(how, what)
-        except (NoSuchElementException):
+        except NoSuchElementException:
             return False
         return True
 
@@ -45,6 +46,29 @@ class BasePage():
 
         self.walk_the_path(path, check)
 
+    def should_be_root(self, path):
+        root = self.root_directory(path)
+        print(root)
+        self.should_be_folder_or_file(root)
+
+    def should_not_be_root(self, path):
+        root = self.root_directory(path)
+        print(root)
+        self.should_not_be_folder_or_file(root)
+
+    def root_directory(self, path):
+        end_name = 0
+        beginning_name = 0
+        true_path = urllib.parse.unquote(path)
+        for i in true_path:
+            end_name += 1
+            if i == "/":
+                beginning_name = end_name
+                return path[0:end_name - 1]
+
+        if beginning_name == 0 and end_name != 0:
+            return path
+
     def walk_the_path(self, path, check_function):
         true_path = urllib.parse.unquote(path)
         end_name = 0
@@ -55,8 +79,8 @@ class BasePage():
             end_name += 1
             if i == "/":
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name - 1])
-                assert self.is_element_present(
-                    *locator_folder_or_file), f'There is no folder or file named "{true_path[beginning_name:end_name - 1]}"'
+                assert self.is_element_present(*locator_folder_or_file), \
+                    f'There is no folder or file named "{true_path[beginning_name:end_name - 1]}"'
                 folder = self.browser.find_element(*locator_folder_or_file)
                 driver = self.browser
                 actionChains = ActionChains(driver)
