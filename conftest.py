@@ -1,8 +1,9 @@
-import pytest
-import time
 from selenium import webdriver
 from .yadi_disk_api import API
+from .pages.login_page import LoginPage
 import urllib.parse
+import pytest
+import time
 
 
 def pytest_addoption(parser):
@@ -25,8 +26,20 @@ def browser(request):
 
     yield browser
     print("\nquit browser..")
-    time.sleep(3)
     browser.quit()
+
+
+@pytest.fixture(scope="function", autouse=True)
+def setup(browser):
+    link = "https://disk.yandex.ru/client"
+    login_page = LoginPage(browser, link)
+    login_page.open()
+    login = "your login"
+    password = "your password"
+    login_page.login_user(login, password)
+    time.sleep(1)
+    # Пришлось добавить ожидание для того что бы можно было открыть другую страницу.
+    # Без  него страница логина не успевает до конца загрузиться.
 
 
 @pytest.fixture(scope="function", params=["QA%2FQA2"])
