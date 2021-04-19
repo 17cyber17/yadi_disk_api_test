@@ -8,7 +8,7 @@ import urllib.parse
 
 
 class BasePage:
-    def __init__(self, browser, url, timeout=10):
+    def __init__(self, browser, url, timeout=3):
         self.browser = browser
         self.url = url
         self.browser.implicitly_wait(timeout)
@@ -41,6 +41,7 @@ class BasePage:
 
     def should_not_be_folder_or_file(self, path):
         def check(beginning_name, end_name, true_path, locator_folder_or_file):
+            # Приходится проверять не отсуствие элемента, а его исчезновение потому что он не моментально пропадает.
             assert self.is_disappeared(*locator_folder_or_file), \
                 f'The file or folder named "{true_path[beginning_name:end_name]}"exists, although it shouldnt'
 
@@ -48,17 +49,17 @@ class BasePage:
 
     def should_be_root(self, path):
         root = self.root_directory(path)
-        print(root)
         self.should_be_folder_or_file(root)
 
     def should_not_be_root(self, path):
         root = self.root_directory(path)
-        print(root)
         self.should_not_be_folder_or_file(root)
 
-    def root_directory(self, path):
+    @staticmethod
+    def root_directory(path):
         end_name = 0
         beginning_name = 0
+        # Раскодируем специальные символы для упрощения работы.
         true_path = urllib.parse.unquote(path)
         for i in true_path:
             end_name += 1
@@ -77,22 +78,24 @@ class BasePage:
 
         for i in true_path:
             end_name += 1
+            # Идем по пути проверя существование каждой папки в нем.
             if i == "/":
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name - 1])
                 assert self.is_element_present(*locator_folder_or_file), \
                     f'There is no folder or file named "{true_path[beginning_name:end_name - 1]}"'
                 folder = self.browser.find_element(*locator_folder_or_file)
                 driver = self.browser
-                actionChains = ActionChains(driver)
-                actionChains.double_click(folder).perform()
+                # Нужно использовать цепочку для даблклика из-за того, что просто нажать два раза подряд не срабатывает.
+                action_chains = ActionChains(driver)
+                action_chains.double_click(folder).perform()
                 beginning_name = end_name
 
+        # Случай если путь состоял только из корня.
         if beginning_name == 0 and end_name != 0:
             locator_folder_or_file = locator.search_for_file_or_folder(true_path)
             check_function(beginning_name, end_name, true_path, locator_folder_or_file)
         else:
+            # Проверка последнего элемента на пути.
             if beginning_name != 0:
                 locator_folder_or_file = locator.search_for_file_or_folder(true_path[beginning_name:end_name])
                 check_function(beginning_name, end_name, true_path, locator_folder_or_file)
-
-
